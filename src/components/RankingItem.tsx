@@ -4,13 +4,14 @@ import Image from "next/image";
 
 interface RankingItemProps {
   item: Ranking;
+  isMyRank?: boolean;
 }
 
-export default function RankingItem({ item }: RankingItemProps) {
+export default function RankingItem({ item, isMyRank = false }: RankingItemProps) {
   const { rank, name, time } = item;
 
   return (
-    <li className="bg-white h-16 pl-7 pr-4 rounded-xl flex justify-between items-center">
+    <li className={`h-16 bg-white pl-7 pr-4 rounded-xl flex justify-between items-center shadow-custom-2 ${isMyRank ? "border border-purple" : ""}`}>
       <div className="flex items-center gap-5">
         <div className="w-7 h-10 relative flex items-center justify-center">
           {rank > 3 ? (
@@ -19,7 +20,10 @@ export default function RankingItem({ item }: RankingItemProps) {
             <Image src={`/images/img_${rank}.png`} alt={`rank-${rank}`} fill className="object-contain" />
           )}
         </div>
-        <span className="font-bold">{name}</span>
+        <div className="flex items-center gap-x-2">
+          <span className="font-bold">{name}</span>
+          {isMyRank && <div className="flex items-center h-7 px-1.5 text-sm bg-lightPurple text-purple rounded-md">나의 순위</div>}
+        </div>
       </div>
       <span className="text-sm text-[rgba(80,80,80,pgl1)]">{formatMinutesToHours(time)}</span>
     </li>

@@ -21,3 +21,15 @@ export const formatSecondsToMinutes = (seconds: number) => {
   const secs = (seconds % 60).toString().padStart(2, "0");
   return `${minutes}:${secs}`;
 };
+
+/**
+ * 초를 시간과 분과 초로 변환
+ * @param seconds 초
+ * @returns 00:00:00
+ */
+export const formatSecondsToHours = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600).toString().padStart(2, "0");
+  const minutes = Math.floor((seconds % 3600) / 60).toString().padStart(2, "0");
+  const secs = (seconds % 60).toString().padStart(2, "0");
+  return `${hours} : ${minutes} : ${secs}`;
+};
