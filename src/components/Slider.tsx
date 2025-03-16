@@ -2,23 +2,16 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const slides = [
-  { id: 1, color: "#E55549" },
-  { id: 2, color: "#FF9900" },
-  { id: 3, color: "#FFEE00" },
-  { id: 4, color: "#1BC139" },
-  { id: 5, color: "#499FE5" },
-  { id: 6, color: "#494EE5" },
-  { id: 7, color: "#972CE3" },
-];
+interface SliderProps {
+  slides: React.ReactNode[];
+  interval?: number;
+}
 
-const INTERVAL = 5000; // 5초마다 자동 슬라이드
-
-export default function Slider() {
+export default function Slider({ slides, interval = 5000 }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLDivElement | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isUserScrolling = useRef(false); // 사용자가 스크롤 중인지 감지
+  const isUserScrolling = useRef<boolean>(false);
 
   const startAutoSlide = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -27,32 +20,29 @@ export default function Slider() {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
       }
       startAutoSlide();
-    }, INTERVAL);
-  }, []);
+    }, interval);
+  }, [interval, slides.length]);
 
-  // 스크롤 감지하여 현재 보이는 슬라이드 currentIndex로 설정
-  const handleScroll = useCallback(() => {
+  const updateCurrentIndex = useCallback(() => {
     if (!sliderRef.current) return;
-    isUserScrolling.current = true;
-
-    requestAnimationFrame(() => {
-      const scrollLeft = sliderRef.current!.scrollLeft;
-      const slideWidth = sliderRef.current!.clientWidth;
-      const newIndex = Math.round(scrollLeft / slideWidth);
-
-      if (newIndex !== currentIndex) {
-        setCurrentIndex(newIndex);
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        startAutoSlide();
-      }
-
-      setTimeout(() => {
-        isUserScrolling.current = false;
-      }, 300); // 스크롤 멈추면 자동 슬라이드 재개
-    });
+    const scrollLeft = sliderRef.current.scrollLeft;
+    const slideWidth = sliderRef.current.clientWidth;
+    const newIndex = Math.round(scrollLeft / slideWidth);
+    if (newIndex !== currentIndex) {
+      setCurrentIndex(newIndex);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      startAutoSlide();
+    }
   }, [currentIndex, startAutoSlide]);
 
-  // currentIndex 변경될 때 자동 스크롤
+  const handleScroll = useCallback(() => {
+    isUserScrolling.current = true;
+    requestAnimationFrame(updateCurrentIndex);
+    setTimeout(() => {
+      isUserScrolling.current = false;
+    }, 300);
+  }, [updateCurrentIndex]);
+
   useEffect(() => {
     if (sliderRef.current && !isUserScrolling.current) {
       sliderRef.current.scrollTo({
@@ -76,18 +66,11 @@ export default function Slider() {
         className="relative flex overflow-x-auto scroll-smooth snap-x snap-mandatory w-full h-full scrollbar-hidden"
         onScroll={handleScroll}
       >
-        {slides.map((slide) => (
-          <div
-            key={slide.id}
-            className="w-full h-full flex-shrink-0 flex items-center justify-center text-white text-lg font-bold snap-start"
-            style={{ backgroundColor: slide.color }}
-          >
-          </div>
-        ))}
+        {slides.map((slide) => slide)}
       </div>
       <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 z-10 flex gap-1">
-        {slides.map((slide) => (
-          <div key={slide.id} className={`w-5 h-[3px] transition-all duration-200 ${slide.id-1 === currentIndex ? "bg-white" : "bg-white/50"}`}></div>
+        {slides.map((_, index) => (
+          <div key={index} className={`w-5 h-[3px] transition-all duration-200 ${index === currentIndex ? "bg-white" : "bg-white/50"}`}></div>
         ))}
       </div>
     </div>

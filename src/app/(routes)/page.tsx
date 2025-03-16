@@ -55,7 +55,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-y-3">
-      <header className="flex justify-between items-center h-10 sticky top-0 left-6 right-6 bg-[rgba(249,249,251,1)] z-10">
+      <header className="flex justify-between items-center h-16 px-6 fixed top-0 left-0 right-0 bg-[rgba(249,249,251,1)] z-10">
         <h1 className="text-base font-bold">우리 지점 랭킹</h1>
         <Link href="/timer" className="flex items-center gap-3 px-2.5 py-1.5 hover:bg-lightPurple rounded-md transition-colors duration-150">
           <div className="text-sm">타이머 보기</div>
@@ -63,7 +63,7 @@ export default function Home() {
         </Link>
       </header>
 
-      <main className="flex flex-col gap-y-3">
+      <main className="flex flex-col gap-y-3 mt-20">
         {myRank && (
           <section className="flex items-center justify-between px-4 py-3 bg-white rounded-xl shadow-custom-2">
             <div className="flex items-center gap-x-2">

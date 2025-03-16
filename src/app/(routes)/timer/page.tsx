@@ -9,6 +9,17 @@ import { useEffect, useState } from "react";
 const MONEY_INCREMENT = 500; // 1분마다 증가할 금액
 const VIDEO_INCREMENT = 1; // 1분마다 증가할 영상 개수
 const TIMER_KEY = "studywork-timer";
+const INTERVAL = 5000;
+
+const slides = [
+  { id: 1, color: "#E55549" },
+  { id: 2, color: "#FF9900" },
+  { id: 3, color: "#FFEE00" },
+  { id: 4, color: "#1BC139" },
+  { id: 5, color: "#499FE5" },
+  { id: 6, color: "#494EE5" },
+  { id: 7, color: "#972CE3" },
+];
 
 export default function Timer() {
   const router = useRouter();
@@ -62,19 +73,28 @@ export default function Timer() {
 
   return (
     <div>
-      <header className="h-10 sticky top-0 left-0 right-0 z-10 flex items-center justify-center bg-white">
+      <header className="h-16 fixed top-0 left-0 right-0 z-10 flex items-center justify-center bg-white">
         <button
           title="뒤로가기"
           aria-label="뒤로가기"
-          className="w-8 h-8 absolute top-1/2 left-0 -translate-y-1/2 flex items-center justify-center"
+          className="w-8 h-8 absolute top-1/2 left-4 -translate-y-1/2 flex items-center justify-center"
           onClick={() => router.back()}
         >
           <Image src="/images/arrow-right.png" alt="arrow-left" width={10} height={16} className="rotate-180" />
         </button>
         <h1 className="font-medium">공부 타이머</h1>
       </header>
-      <main className="pt-20">
-      <Slider />
+      <main className="pt-20 mt-16">
+        <Slider 
+          slides={slides.map((slide, index) => (
+            <div
+              key={index}
+              className="w-full h-full flex-shrink-0 snap-start"
+              style={{ backgroundColor: slide.color }}
+            >
+            </div>
+          ))} 
+        />
         <div className="grid grid-cols-2 gap-3 mt-5">
           <div className={`${cardClass} col-span-2 gap-x-8 px-8`}>
             <div className="w-16 h-16 bg-lightPurple rounded-full flex items-center justify-center">
