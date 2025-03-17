@@ -1,3 +1,4 @@
+import { fetchRanking } from "@/services/rankingService";
 import { Ranking } from "@/types/rank";
 import { useState } from "react";
 
@@ -10,8 +11,7 @@ const useRanking = () => {
   const getRanking = async (first = false) => {
     setLoading(true);
 
-    const res = await fetch(`/api/ranking?page=${first ? 1 : page}&size=10`);
-    const newData = await res.json();
+    const newData = await fetchRanking(page);
 
     // 1페이지(초기 데이터 설정)
     if (first) {
