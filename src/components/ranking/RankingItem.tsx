@@ -17,7 +17,13 @@ export default function RankingItem({ item, isMyRank = false }: RankingItemProps
           {rank > 3 ? (
             <span className="font-bold">{rank}</span>
           ) : (
-            <Image src={`/images/img_${rank}.png`} alt={`rank-${rank}`} fill className="object-contain" />
+            <Image 
+              src={`/images/img_${rank}.png`} 
+              alt={`rank-${rank}`} 
+              fill 
+              sizes="100%" 
+              className="object-contain" 
+            />
           )}
         </div>
         <div className="flex items-center gap-x-2">
