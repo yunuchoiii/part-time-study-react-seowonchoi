@@ -1,9 +1,9 @@
 "use client";
 
-import FloatingButton from "@/components/FloatingButton";
-import Loader from "@/components/Loader";
-import QRModal from "@/components/QRModal";
-import RankingItem from "@/components/RankingItem";
+import FloatingButton from "@/components/buttons/FloatingButton";
+import CircularLoader from "@/components/loader/CircularLoader";
+import QRLoginModal from "@/components/modal/QRLoginModal";
+import RankingItem from "@/components/ranking/RankingItem";
 import useRanking from "@/hooks/useRanking";
 import useScroll from "@/hooks/useScroll";
 import { Ranking } from "@/types/rank";
@@ -15,7 +15,7 @@ import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 
 export default function Home() {
   const { ranking, loading, getRanking, isEnd } = useRanking();
-  const { isBottom, scrollDirection } = useScroll();
+  const { isBottom } = useScroll();
 
   const [myRank, setMyRank] = useState<Ranking | null>(null);
 
@@ -84,7 +84,7 @@ export default function Home() {
           </ul>
         </section>
 
-        {loading && !isEnd && <Loader/>}
+        {loading && !isEnd && <CircularLoader/>}
 
         {isEnd && (
           <p className="text-center text-sm text-gray-500 mt-5">
@@ -98,7 +98,7 @@ export default function Home() {
           onClick={() => setIsModalOpen(true)} 
         />
 
-        <QRModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+        <QRLoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
       </main>
     </div>
   );

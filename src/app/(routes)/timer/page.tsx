@@ -1,6 +1,6 @@
 "use client";
 
-import Slider from "@/components/Slider";
+import Slider from "@/components/slider/Slider";
 import { formatSecondsToHours } from "@/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -85,7 +85,7 @@ export default function Timer() {
         <h1 className="font-medium">공부 타이머</h1>
       </header>
       <main className="pt-20 mt-16">
-        <Slider 
+        <Slider
           slides={slides.map((slide, index) => (
             <div
               key={index}

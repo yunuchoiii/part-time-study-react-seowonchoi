@@ -8,7 +8,7 @@ interface ModalProps {
   onClose: () => void;
 }
 
-export default function QRModal({ isOpen, onClose }: ModalProps) {
+export default function QRLoginModal({ isOpen, onClose }: ModalProps) {
   if (!isOpen) return null;
 
   const [timeLeft, setTimeLeft] = useState(180);

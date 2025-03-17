@@ -3,7 +3,7 @@
 import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
 
-export default function Loader() {
+export default function CircularLoader() {
   const [animationData, setAnimationData] = useState(null);
 
   useEffect(() => {
