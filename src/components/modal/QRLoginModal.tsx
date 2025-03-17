@@ -44,7 +44,7 @@ export default function QRLoginModal({ isOpen, onClose }: ModalProps) {
         className="bg-white rounded-[32px] py-8 px-10"
       >
         <div className="flex flex-col items-center justify-between gap-5">
-          <h2 className="text-lg font-bold">QR 코드</h2>
+          <h2 className="text-lg font-bold">QR 로그인</h2>
           <div className="relative">
             <QRCodeCanvas value={qrValue} size={258} />
             {timeLeft == 0 && (

@@ -95,7 +95,7 @@ export default function Home() {
 
         <FloatingButton 
           icon={<Image src="/images/icon_qr.png" alt="qr-code" width={24} height={24} />}
-          title="QR 코드"
+          title="QR 로그인"
           onClick={() => setIsModalOpen(true)} 
         />
 

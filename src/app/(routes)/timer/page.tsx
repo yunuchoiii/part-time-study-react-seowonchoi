@@ -84,7 +84,7 @@ export default function Timer() {
         </button>
         <h1 className="font-medium">공부 타이머</h1>
       </header>
-      <main className="pt-20 mt-16">
+      <main className="pt-10 mt-16">
         <Slider
           slides={slides.map((slide, index) => (
             <div
