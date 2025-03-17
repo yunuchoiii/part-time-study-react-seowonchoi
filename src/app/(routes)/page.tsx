@@ -1,9 +1,11 @@
 "use client";
 
+import FloatingButton from "@/components/FloatingButton";
 import Loader from "@/components/Loader";
 import QRModal from "@/components/QRModal";
 import RankingItem from "@/components/RankingItem";
 import useRanking from "@/hooks/useRanking";
+import useScroll from "@/hooks/useScroll";
 import { Ranking } from "@/types/rank";
 import { formatMinutesToHours } from "@/utils";
 import throttle from "lodash/throttle";
@@ -13,6 +15,7 @@ import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 
 export default function Home() {
   const { ranking, loading, getRanking, isEnd } = useRanking();
+  const { isBottom, scrollDirection } = useScroll();
 
   const [myRank, setMyRank] = useState<Ranking | null>(null);
 
@@ -31,14 +34,11 @@ export default function Home() {
   const handleScroll = useCallback(
     // 0.5초에 한 번씩 실행되도록 제한
     throttle(() => {
-      if (
-        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500 &&
-        !loading
-      ) {
+      if (isBottom() && !loading) {
         getRanking();
       }
     }, 500),
-    [loading, getRanking]
+    [loading, getRanking, isBottom]
   );
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function Home() {
           </ul>
         </section>
 
-        {loading && <Loader/>}
+        {loading && !isEnd && <Loader/>}
 
         {isEnd && (
           <p className="text-center text-sm text-gray-500 mt-5">
@@ -92,15 +92,11 @@ export default function Home() {
           </p>
         )}
 
-        <button 
-          title="QR 코드 보기"
-          aria-label="QR 코드 보기"
+        <FloatingButton 
+          icon={<Image src="/images/icon_qr.png" alt="qr-code" width={24} height={24} />}
+          title="QR 코드"
           onClick={() => setIsModalOpen(true)} 
-          className="w-36 h-14 fixed z-10 bottom-6 left-1/2 -translate-x-1/2 bg-white rounded-full border border-purple flex items-center justify-center gap-x-2 shadow-lg hover:bg-lightPurple active:scale-95 active:shadow-md transition-all duration-150"
-        >
-          <Image src="/images/icon_qr.png" alt="qr-code" width={24} height={24} />
-          <span>QR 코드</span>
-        </button>
+        />
 
         <QRModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
       </main>
