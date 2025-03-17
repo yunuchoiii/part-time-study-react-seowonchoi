@@ -28,17 +28,18 @@ export default function Home() {
 
   // 내 랭킹 설정 (1-10위 중 랜덤)
   useEffect(() => {
+    if (myRank) return;
     setMyRank(ranking[Math.floor(Math.random() * 10)]);
-  }, [ranking]);
+  }, [ranking, myRank]);
 
   const handleScroll = useCallback(
     // 0.5초에 한 번씩 실행되도록 제한
     throttle(() => {
-      if (isBottom() && !loading) {
+      if (isBottom() && !loading && !isEnd) {
         getRanking();
       }
     }, 500),
-    [loading, getRanking, isBottom]
+    [loading, getRanking, isBottom, isEnd]
   );
 
   useEffect(() => {
