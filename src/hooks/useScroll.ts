@@ -20,6 +20,10 @@ const useScroll = () => {
     setLastScrollY(currentScrollY);
   }, [lastScrollY]);
 
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -27,7 +31,7 @@ const useScroll = () => {
     };
   }, [handleScroll]);
 
-  return { isTop, isBottom, scrollDirection };
+  return { isTop, isBottom, scrollDirection, scrollToTop };
 };
 
 export default useScroll;

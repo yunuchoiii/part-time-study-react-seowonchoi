@@ -15,7 +15,7 @@ import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 
 export default function Home() {
   const { ranking, loading, getRanking, isEnd } = useRanking();
-  const { isBottom } = useScroll();
+  const { isBottom, isTop, scrollToTop } = useScroll();
 
   const [myRank, setMyRank] = useState<Ranking | null>(null);
 
@@ -56,8 +56,10 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-y-3">
-      <header className="flex justify-between items-center h-16 px-6 fixed top-0 left-0 right-0 bg-[rgba(249,249,251,1)] z-10">
-        <h1 className="text-base font-bold">우리 지점 랭킹</h1>
+      <header className={`flex justify-between items-center h-16 px-6 fixed top-0 left-0 right-0 z-10 bg-[rgba(249,249,251,1)] transition-shadow duration-300 ${isTop() ? "" : "shadow-custom-1"}`}>
+        <button onClick={() => scrollToTop()}>
+          <h1 className="text-base font-bold">우리 지점 랭킹</h1>
+        </button>
         <Link href="/timer" className="flex items-center gap-3 px-2.5 py-1.5 hover:bg-lightPurple rounded-md transition-colors duration-150">
           <div className="text-sm">타이머 보기</div>
           <Image src="/images/arrow-right.png" alt="arrow-right" width={8} height={8} />

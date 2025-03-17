@@ -1,6 +1,7 @@
 "use client";
 
 import Slider from "@/components/slider/Slider";
+import useScroll from "@/hooks/useScroll";
 import { formatSecondsToHours } from "@/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -23,6 +24,7 @@ const slides = [
 
 export default function Timer() {
   const router = useRouter();
+  const { isTop, scrollToTop } = useScroll();
   const cardClass = "py-6 bg-white rounded-2xl shadow-custom-1 flex items-center justify-center";
 
   const [studyData, setStudyData] = useState({
@@ -73,7 +75,7 @@ export default function Timer() {
 
   return (
     <div>
-      <header className="h-16 fixed top-0 left-0 right-0 z-10 flex items-center justify-center bg-white">
+      <header className={`h-16 fixed top-0 left-0 right-0 z-10 flex items-center justify-center bg-white transition-shadow duration-300 ${isTop() ? "" : "shadow-custom-1"}`}>
         <button
           title="뒤로가기"
           aria-label="뒤로가기"
@@ -82,7 +84,9 @@ export default function Timer() {
         >
           <Image src="/images/arrow-right.png" alt="arrow-left" width={10} height={16} className="rotate-180" />
         </button>
-        <h1 className="font-medium">공부 타이머</h1>
+        <button onClick={() => scrollToTop()}>
+          <h1 className="font-medium">공부 타이머</h1>
+        </button>
       </header>
       <main className="pt-10 mt-16">
         <Slider
