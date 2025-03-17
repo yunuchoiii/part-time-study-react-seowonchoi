@@ -48,12 +48,12 @@ export default function QRLoginModal({ isOpen, onClose }: ModalProps) {
           <div className="relative">
             <QRCodeCanvas value={qrValue} size={258} />
             {timeLeft == 0 && (
-              <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white/90">
+              <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white/90 fade-in">
                 <button 
                   title="QR 코드 새로고침"
                   aria-label="QR 코드 새로고침"
                   onClick={updateQRCode}
-                  className="w-[72px] h-[72px] bg-white hover:brightness-95 active:brightness-90 rounded-full flex items-center justify-center shadow-[2px_4px_16px_0_rgba(28,28,30,0.1)]"
+                  className="w-[72px] h-[72px] bg-white hover:brightness-95 active:brightness-90 rounded-full flex items-center justify-center shadow-[2px_4px_16px_0_rgba(28,28,30,0.1)] hover:rotate-90 transition-transform duration-300"
                 >
                   <Image src="/images/icon_refresh.png" alt="qr-expired" width={40} height={40} />
                 </button>
