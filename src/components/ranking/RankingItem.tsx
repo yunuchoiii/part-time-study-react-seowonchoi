@@ -11,7 +11,7 @@ export default function RankingItem({ item, isMyRank = false }: RankingItemProps
   const { rank, name, time } = item;
 
   return (
-    <li className={`h-16 bg-white pl-7 pr-4 rounded-xl flex justify-between items-center shadow-custom-2 ${isMyRank ? "border border-purple" : ""}`}>
+    <li className={`h-16 bg-white pl-7 pr-4 rounded-xl flex justify-between items-center ${isMyRank ? "border border-purple shadow-custom-purple" : "shadow-custom-2"}`}>
       <div className="flex items-center gap-5">
         <div className="w-7 h-10 relative flex items-center justify-center">
           {rank > 3 ? (

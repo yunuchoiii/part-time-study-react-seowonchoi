@@ -18,6 +18,7 @@ const config: Config = {
       boxShadow: {
         "custom-1": "2px 4px 16px 0px rgba(0, 0, 0, 0.08)",
         "custom-2": "2px 4px 16px 0px rgba(0, 0, 0, 0.05)",
+        "custom-purple": "2px 4px 16px 0px rgba(134, 71, 240, 0.08)",
       },
     },
   },
