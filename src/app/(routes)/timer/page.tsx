@@ -1,5 +1,6 @@
 "use client";
 
+import TimerCard from "@/components/cards/TimerCard";
 import Slider from "@/components/slider/Slider";
 import useScroll from "@/hooks/useScroll";
 import useTimer from "@/hooks/useTimer";
@@ -23,9 +24,6 @@ export default function Timer() {
   const { isAtTop, scrollToTop } = useScroll();
   const studyData = useTimer();
 
-  // 카드 공통 스타일
-  const cardClass = "py-6 bg-white rounded-2xl shadow-custom-1 flex items-center justify-center";
-
   return (
     <div>
       <header className={`h-16 fixed top-0 left-0 right-0 z-10 flex items-center justify-center bg-white transition-shadow duration-300 ${isAtTop ? "" : "shadow-custom-1"}`}>
@@ -35,7 +33,13 @@ export default function Timer() {
           className="w-8 h-8 absolute top-1/2 left-4 -translate-y-1/2 flex items-center justify-center"
           onClick={() => router.back()}
         >
-          <Image src="/images/arrow-right.png" alt="arrow-left" width={10} height={16} className="rotate-180" />
+          <Image 
+            src="/images/arrow-right.png" 
+            alt="arrow-left" 
+            width={10} 
+            height={16} 
+            className="rotate-180" 
+          />
         </button>
         <button onClick={() => scrollToTop()}>
           <h1 className="font-medium">공부 타이머</h1>
@@ -55,29 +59,22 @@ export default function Timer() {
           />
         </section>
         <section className="grid grid-cols-2 gap-3 mt-5" aria-labelledby="study-timer">
-          <article className={`${cardClass} col-span-2 gap-x-8 px-8`}>
-            <div className="w-16 h-16 bg-lightPurple rounded-full flex items-center justify-center">
-              <Image src="/images/icon_pencil.png" alt="timer" width={50} height={50} />
-            </div>
-            <div className="grid gap-y-2 flex-1">
-              <p className="text-lightGray">오늘 공부 시간</p>
-              <p className="text-[28px] font-bold">{formatSecondsToHours(studyData.seconds)}</p>
-            </div>
-          </article>
-          <article className={`${cardClass} gap-y-2 flex-col`}>
-            <p className="text-lightGray">보유 공부 상금</p>
-            <div className="flex items-center gap-x-2">
-              <Image src="/images/icon_coin.png" alt="money" width={32} height={32} />
-              <span className="text-lg font-bold underline underline-offset-4">{studyData.money}원</span>
-            </div>
-          </article>
-          <article className={`${cardClass} gap-y-2 flex-col`}>
-            <p className="text-lightGray">오늘 공부 영상</p>
-            <div className="flex items-center gap-x-2">
-              <Image src="/images/icon_cam.png" alt="video" width={32} height={32} />
-              <span className="text-lg font-bold underline underline-offset-4">{studyData.videos}개</span>
-            </div>
-          </article>
+          <TimerCard 
+            title="오늘 공부 시간" 
+            icon="/images/icon_pencil.png" 
+            value={formatSecondsToHours(studyData.seconds)} 
+            isFullWidth
+          />
+          <TimerCard 
+            title="보유 공부 상금" 
+            icon="/images/icon_coin.png" 
+            value={`${studyData.money}원`} 
+          />
+          <TimerCard 
+            title="오늘 공부 영상" 
+            icon="/images/icon_cam.png" 
+            value={`${studyData.videos}개`} 
+          />
         </section>
       </main>
     </div>
