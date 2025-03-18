@@ -58,6 +58,10 @@ src
  ┃ ┗ rank.ts
  ┣ utils           # 유틸리티 함수
  ┃ ┗ index.ts
+ ┣ __test__        # 테스트코드 파일
+ ┃ ┗ hooks
+ ┃ ┃ ┣ useRanking.test.tsx
+ ┃ ┃ ┗ useTimer.test.tsx
 ```
 
 ## 주요 기능
@@ -86,6 +90,10 @@ src
 - Header 상단 고정 및 스크롤 위치에 따른 Header 그림자 효과 적용
 - Lodash / throttle 최적화 적용
 
+### 5. 테스트 코드 작성
+- Jest & Testing Library 활용한 테스트 코드 작성
+- 커스텀훅 작동 테스트 코드 구현
+
 ## 기술 스택
 | 기술          | 사용 목적 |
 |--------------|----------|
@@ -94,6 +102,7 @@ src
 | TailwindCSS | 스타일링 및 반응형 UI 구현 |
 | Lottie | 로딩 애니메이션 적용 |
 | Lodash | `throttle` 활용하여 성능 최적화 |
+| Jest & Testing Library | 테스트 코드 구현 |
 
 ## 구현 방향
 - 확장성을 고려한 폴더 구조: 컴포넌트, 훅, 서비스 분리
