@@ -18,8 +18,8 @@ export default function Home() {
   const { isAtBottom, isAtTop, scrollToTop } = useScroll();
 
   // 내 랭킹
-  const [myTodayRank, setMyTodayRank] = useState<number>(3);
-  const [myYesterdayRank, setMyYesterdayRank] = useState<number>(4);
+  const [myTodayRank, setMyTodayRank] = useState<number>(0);
+  const [myYesterdayRank, setMyYesterdayRank] = useState<number>(0);
   const myRankingItem = useMemo(() => {
     return ranking.find((item) => item.rank === myTodayRank);
   }, [ranking, myTodayRank]);
@@ -27,20 +27,21 @@ export default function Home() {
   // QR 로그인 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfettiOpen, setIsConfettiOpen] = useState(false);
+
   // 초기 랭킹 데이터 가져오기
   useEffect(() => {
     getRanking(true);
   }, []);
 
   // 내 랭킹 설정 (랜덤 1-10위)
-  // useEffect(() => {
-  //   if (myTodayRank === 0) {
-  //     setMyTodayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
-  //   }
-  //   if (myYesterdayRank === 0) {
-  //     setMyYesterdayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
-  //   }
-  // }, [ranking]);
+  useEffect(() => {
+    if (myTodayRank === 0) {
+      setMyTodayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
+    }
+    if (myYesterdayRank === 0) {
+      setMyYesterdayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
+    }
+  }, [ranking]);
 
   useEffect(() => {
     if (myTodayRank <= 3 && myTodayRank !== 0) {
@@ -87,7 +88,7 @@ export default function Home() {
       </header>
 
       <main className="flex flex-col gap-y-3 mt-20">
-        {myTodayRank && (
+        {myTodayRank !== 0 && (
           <section aria-labelledby="my-rank" className="flex items-center justify-between px-4 py-3 bg-white rounded-xl shadow-custom-2">
             <div className="flex items-center gap-x-2">
               <span>나의 랭킹: <b>{myRankingItem?.rank}등</b></span>

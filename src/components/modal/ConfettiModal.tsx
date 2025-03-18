@@ -26,10 +26,7 @@ export default function ConfettiModal({ isOpen, onClose, myRank }: ModalProps) {
       onClick={onClose}
       className="fixed top-0 left-0 z-50 w-screen h-screen bg-black/80 flex items-center justify-center fade-in"
     >
-      <section 
-        onClick={(e) => e.stopPropagation()}
-        className=""
-      >
+      <section aria-labelledby="confetti-modal">
         <div className="relative">
           <Lottie animationData={animationData}/>
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">

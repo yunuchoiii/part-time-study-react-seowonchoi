@@ -4,8 +4,8 @@ const useScroll = () => {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const isAtTop = window.scrollY === 0;
-  const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500;
+  const isAtTop = typeof window !== "undefined" && window.scrollY === 0;
+  const isAtBottom = typeof window !== "undefined" && window.innerHeight + window.scrollY >= (document?.documentElement?.scrollHeight ?? 0) - 500;
 
   const handleScroll = useCallback(() => {
     if (typeof window !== "undefined") {
