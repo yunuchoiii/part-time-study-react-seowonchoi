@@ -2,22 +2,21 @@ import { useCallback, useEffect, useState } from "react";
 
 const useScroll = () => {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
-  const [lastScrollY, setLastScrollY] = useState(window.scrollY);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
-  const isTop = useCallback(() => window.scrollY === 0, []);
-
-  const isBottom = useCallback(() => {
-    return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500;
-  }, []);
+  const isScrollTop = window.scrollY === 0;
+  const isScrollBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500;
 
   const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
-    if (currentScrollY > lastScrollY) {
-      setScrollDirection("down");
-    } else {
-      setScrollDirection("up");
+    if (typeof window !== "undefined") {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY) {
+        setScrollDirection("down");
+      } else {
+        setScrollDirection("up");
+      }
+      setLastScrollY(currentScrollY);
     }
-    setLastScrollY(currentScrollY);
   }, [lastScrollY]);
 
   const scrollToTop = useCallback(() => {
@@ -31,7 +30,7 @@ const useScroll = () => {
     };
   }, [handleScroll]);
 
-  return { isTop, isBottom, scrollDirection, scrollToTop };
+  return { isScrollTop, isScrollBottom, scrollDirection, scrollToTop };
 };
 
 export default useScroll;

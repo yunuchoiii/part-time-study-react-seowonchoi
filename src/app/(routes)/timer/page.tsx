@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 
 const MONEY_INCREMENT = 500; // 1분마다 증가할 금액
 const VIDEO_INCREMENT = 1; // 1분마다 증가할 영상 개수
-const TIMER_KEY = "studywork-timer";
-const INTERVAL = 5000;
+const TIMER_KEY = "studywork-timer"; // 타이머 로컬스토리지 key
 
+// 슬라이더 데이터
 const slides = [
   { id: 1, color: "#E55549" },
   { id: 2, color: "#FF9900" },
@@ -24,9 +24,12 @@ const slides = [
 
 export default function Timer() {
   const router = useRouter();
-  const { isTop, scrollToTop } = useScroll();
+  const { isScrollTop, scrollToTop } = useScroll();
+
+  // 카드 공통 스타일
   const cardClass = "py-6 bg-white rounded-2xl shadow-custom-1 flex items-center justify-center";
 
+  // 공부 데이터 (시간, 금액, 영상 개수, 시작 시간)
   const [studyData, setStudyData] = useState({
     seconds: 0,
     money: 0,
@@ -34,6 +37,7 @@ export default function Timer() {
     startTime: null as number | null,
   });
 
+  // 공부 데이터 로컬스토리지 -> state 저장
   useEffect(() => {
     const savedData = localStorage.getItem(TIMER_KEY);
 
@@ -64,8 +68,10 @@ export default function Timer() {
           startTime: Math.floor(Date.now() / 1000),
         };
 
+        // 공부 데이터 로컬스토리지 저장
         localStorage.setItem(TIMER_KEY, JSON.stringify(updatedData));
 
+        // 공부 데이터 state 업데이트
         return updatedData;
       });
     }, 1000);
@@ -75,7 +81,7 @@ export default function Timer() {
 
   return (
     <div>
-      <header className={`h-16 fixed top-0 left-0 right-0 z-10 flex items-center justify-center bg-white transition-shadow duration-300 ${isTop() ? "" : "shadow-custom-1"}`}>
+      <header className={`h-16 fixed top-0 left-0 right-0 z-10 flex items-center justify-center bg-white transition-shadow duration-300 ${isScrollTop ? "" : "shadow-custom-1"}`}>
         <button
           title="뒤로가기"
           aria-label="뒤로가기"
@@ -89,41 +95,43 @@ export default function Timer() {
         </button>
       </header>
       <main className="pt-10 mt-16">
-        <Slider
-          slides={slides.map((slide, index) => (
-            <div
-              key={index}
-              className="w-full h-full flex-shrink-0 snap-start"
-              style={{ backgroundColor: slide.color }}
-            >
-            </div>
-          ))} 
-        />
-        <div className="grid grid-cols-2 gap-3 mt-5">
-          <div className={`${cardClass} col-span-2 gap-x-8 px-8`}>
+        <section aria-labelledby="study-slider">
+          <Slider
+            slides={slides.map((slide, index) => (
+              <div
+                key={index}
+                className="w-full h-full flex-shrink-0 snap-start"
+                style={{ backgroundColor: slide.color }}
+              >
+              </div>
+            ))}
+          />
+        </section>
+        <section className="grid grid-cols-2 gap-3 mt-5" aria-labelledby="study-timer">
+          <article className={`${cardClass} col-span-2 gap-x-8 px-8`}>
             <div className="w-16 h-16 bg-lightPurple rounded-full flex items-center justify-center">
               <Image src="/images/icon_pencil.png" alt="timer" width={50} height={50} />
             </div>
-            <div className="flex flex-col gap-y-2 flex-1">
-              <span className="text-lightGray">오늘 공부 시간</span>
-              <span className="text-[28px] font-bold">{formatSecondsToHours(studyData.seconds)}</span>
+            <div className="grid gap-y-2 flex-1">
+              <p className="text-lightGray">오늘 공부 시간</p>
+              <p className="text-[28px] font-bold">{formatSecondsToHours(studyData.seconds)}</p>
             </div>
-          </div>
-          <div className={`${cardClass} gap-y-2 flex-col`}>
+          </article>
+          <article className={`${cardClass} gap-y-2 flex-col`}>
             <p className="text-lightGray">보유 공부 상금</p>
             <div className="flex items-center gap-x-2">
               <Image src="/images/icon_coin.png" alt="money" width={32} height={32} />
               <span className="text-lg font-bold underline underline-offset-4">{studyData.money}원</span>
             </div>
-          </div>
-          <div className={`${cardClass} gap-y-2 flex-col`}>
+          </article>
+          <article className={`${cardClass} gap-y-2 flex-col`}>
             <p className="text-lightGray">오늘 공부 영상</p>
             <div className="flex items-center gap-x-2">
               <Image src="/images/icon_cam.png" alt="video" width={32} height={32} />
               <span className="text-lg font-bold underline underline-offset-4">{studyData.videos}개</span>
             </div>
-          </div>
-        </div>
+          </article>
+        </section>
       </main>
     </div>
   );

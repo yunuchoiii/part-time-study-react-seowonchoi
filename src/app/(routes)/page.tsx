@@ -11,14 +11,16 @@ import { formatMinutesToHours } from "@/utils";
 import throttle from "lodash/throttle";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 export default function Home() {
   const { ranking, loading, getRanking, isEnd } = useRanking();
-  const { isBottom, isTop, scrollToTop } = useScroll();
+  const { isScrollBottom, isScrollTop, scrollToTop } = useScroll();
 
+  // 내 랭킹
   const [myRank, setMyRank] = useState<Ranking | null>(null);
 
+  // QR 로그인 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 초기 랭킹 데이터 가져오기
@@ -26,27 +28,26 @@ export default function Home() {
     getRanking(true);
   }, []);
 
-  // 내 랭킹 설정 (1-10위 중 랜덤)
+  // 내 랭킹 설정 (랜덤 1-10위)
   useEffect(() => {
-    if (myRank) return;
-    setMyRank(ranking[Math.floor(Math.random() * 10)]);
-  }, [ranking, myRank]);
+    if (!myRank && ranking.length > 0) {
+      setMyRank(ranking[Math.floor(Math.random() * Math.min(10, ranking.length))]);
+    }
+  }, [ranking]);
 
-  const handleScroll = useCallback(
-    // 0.5초에 한 번씩 실행되도록 제한
-    throttle(() => {
-      if (isBottom() && !loading && !isEnd) {
+  // 무한 스크롤 이벤트 처리 (500ms 마다 한 번씩 실행)
+  useEffect(() => {
+    const throttledScroll = throttle(() => {
+      if (isScrollBottom && !loading && !isEnd) {
         getRanking();
       }
-    }, 500),
-    [loading, getRanking, isBottom, isEnd]
-  );
+    }, 500);
+  
+    window.addEventListener("scroll", throttledScroll);
+    return () => window.removeEventListener("scroll", throttledScroll);
+  }, [loading, getRanking, isEnd]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
-
+  // 배경 색상 설정
   useLayoutEffect(() => {
     document.body.style.backgroundColor = "rgba(249,249,251,1)";
     return () => {
@@ -56,7 +57,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-y-3">
-      <header className={`flex justify-between items-center h-16 px-6 fixed top-0 left-0 right-0 z-10 bg-[rgba(249,249,251,1)] transition-shadow duration-300 ${isTop() ? "" : "shadow-custom-1"}`}>
+      <header className={`flex justify-between items-center h-16 px-6 fixed top-0 left-0 right-0 z-10 bg-[rgba(249,249,251,1)] transition-shadow duration-300 ${isScrollTop ? "" : "shadow-custom-1"}`}>
         <button onClick={() => scrollToTop()}>
           <h1 className="text-base font-bold">우리 지점 랭킹</h1>
         </button>
