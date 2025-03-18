@@ -8,10 +8,12 @@ const mockRankingData = [
   { rank: 3, name: "사용자 3", time: 80 },
 ];
 
+// 랭킹 서비스 모킹
 jest.mock("@/services/rankingService", () => ({
   fetchRanking: jest.fn(() => Promise.resolve(mockRankingData)),
 }));
 
+// useRanking Hook 테스트
 describe("useRanking Hook", () => {
   it("초기 랭킹 데이터를 가져와야 한다.", async () => {
     const { result } = renderHook(() => useRanking());
