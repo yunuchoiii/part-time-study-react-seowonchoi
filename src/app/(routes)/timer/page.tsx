@@ -20,7 +20,7 @@ const slides = [
 
 export default function Timer() {
   const router = useRouter();
-  const { isScrollTop, scrollToTop } = useScroll();
+  const { isAtTop, scrollToTop } = useScroll();
   const studyData = useTimer();
 
   // 카드 공통 스타일
@@ -28,7 +28,7 @@ export default function Timer() {
 
   return (
     <div>
-      <header className={`h-16 fixed top-0 left-0 right-0 z-10 flex items-center justify-center bg-white transition-shadow duration-300 ${isScrollTop ? "" : "shadow-custom-1"}`}>
+      <header className={`h-16 fixed top-0 left-0 right-0 z-10 flex items-center justify-center bg-white transition-shadow duration-300 ${isAtTop ? "" : "shadow-custom-1"}`}>
         <button
           title="뒤로가기"
           aria-label="뒤로가기"

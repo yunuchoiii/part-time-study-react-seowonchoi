@@ -15,7 +15,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 
 export default function Home() {
   const { ranking, loading, getRanking, isEnd } = useRanking();
-  const { isScrollBottom, isScrollTop, scrollToTop } = useScroll();
+  const { isAtBottom, isAtTop, scrollToTop } = useScroll();
 
   // 내 랭킹
   const [myRank, setMyRank] = useState<Ranking | null>(null);
@@ -38,7 +38,7 @@ export default function Home() {
   // 무한 스크롤 이벤트 처리 (500ms 마다 한 번씩 실행)
   useEffect(() => {
     const throttledScroll = throttle(() => {
-      if (isScrollBottom && !loading && !isEnd) {
+      if (isAtBottom && !loading && !isEnd) {
         getRanking();
       }
     }, 500);
@@ -57,7 +57,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-y-3">
-      <header className={`flex justify-between items-center h-16 px-6 fixed top-0 left-0 right-0 z-10 bg-[rgba(249,249,251,1)] transition-shadow duration-300 ${isScrollTop ? "" : "shadow-custom-1"}`}>
+      <header className={`flex justify-between items-center h-16 px-6 fixed top-0 left-0 right-0 z-10 bg-[rgba(249,249,251,1)] transition-shadow duration-300 ${isAtTop ? "" : "shadow-custom-1"}`}>
         <button onClick={() => scrollToTop()}>
           <h1 className="text-base font-bold">우리 지점 랭킹</h1>
         </button>
