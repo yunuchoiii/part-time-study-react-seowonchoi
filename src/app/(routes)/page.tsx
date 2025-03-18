@@ -2,6 +2,7 @@
 
 import FloatingButton from "@/components/buttons/FloatingButton";
 import CircularLoader from "@/components/loader/CircularLoader";
+import ConfettiModal from "@/components/modal/ConfettiModal";
 import QRLoginModal from "@/components/modal/QRLoginModal";
 import RankingItem from "@/components/ranking/RankingItem";
 import useRanking from "@/hooks/useRanking";
@@ -17,29 +18,35 @@ export default function Home() {
   const { isAtBottom, isAtTop, scrollToTop } = useScroll();
 
   // 내 랭킹
-  const [myTodayRank, setMyTodayRank] = useState<number>(0);
-  const [myYesterdayRank, setMyYesterdayRank] = useState<number>(0);
+  const [myTodayRank, setMyTodayRank] = useState<number>(3);
+  const [myYesterdayRank, setMyYesterdayRank] = useState<number>(4);
   const myRankingItem = useMemo(() => {
     return ranking.find((item) => item.rank === myTodayRank);
   }, [ranking, myTodayRank]);
 
   // QR 로그인 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isConfettiOpen, setIsConfettiOpen] = useState(false);
   // 초기 랭킹 데이터 가져오기
   useEffect(() => {
     getRanking(true);
   }, []);
 
   // 내 랭킹 설정 (랜덤 1-10위)
+  // useEffect(() => {
+  //   if (myTodayRank === 0) {
+  //     setMyTodayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
+  //   }
+  //   if (myYesterdayRank === 0) {
+  //     setMyYesterdayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
+  //   }
+  // }, [ranking]);
+
   useEffect(() => {
-    if (myTodayRank === 0) {
-      setMyTodayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
+    if (myTodayRank <= 3 && myTodayRank !== 0) {
+      setIsConfettiOpen(true);
     }
-    if (myYesterdayRank === 0) {
-      setMyYesterdayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
-    }
-  }, [ranking]);
+  }, [myTodayRank]);
 
   // 무한 스크롤 이벤트 처리 (500ms 마다 한 번씩 실행)
   useEffect(() => {
@@ -117,6 +124,7 @@ export default function Home() {
         />
 
         <QRLoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+        <ConfettiModal myRank={myTodayRank} isOpen={isConfettiOpen} onClose={() => setIsConfettiOpen(false)}/>
       </main>
     </div>
   );
