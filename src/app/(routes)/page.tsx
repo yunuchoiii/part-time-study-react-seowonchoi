@@ -6,19 +6,22 @@ import QRLoginModal from "@/components/modal/QRLoginModal";
 import RankingItem from "@/components/ranking/RankingItem";
 import useRanking from "@/hooks/useRanking";
 import useScroll from "@/hooks/useScroll";
-import { Ranking } from "@/types/rank";
 import { formatMinutesToHours } from "@/utils";
 import throttle from "lodash/throttle";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 
 export default function Home() {
   const { ranking, loading, getRanking, isEnd } = useRanking();
   const { isAtBottom, isAtTop, scrollToTop } = useScroll();
 
   // 내 랭킹
-  const [myRank, setMyRank] = useState<Ranking | null>(null);
+  const [myTodayRank, setMyTodayRank] = useState<number>(0);
+  const [myYesterdayRank, setMyYesterdayRank] = useState<number>(0);
+  const myRankingItem = useMemo(() => {
+    return ranking.find((item) => item.rank === myTodayRank);
+  }, [ranking, myTodayRank]);
 
   // QR 로그인 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,8 +33,11 @@ export default function Home() {
 
   // 내 랭킹 설정 (랜덤 1-10위)
   useEffect(() => {
-    if (!myRank && ranking.length > 0) {
-      setMyRank(ranking[Math.floor(Math.random() * Math.min(10, ranking.length))]);
+    if (myTodayRank === 0) {
+      setMyTodayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
+    }
+    if (myYesterdayRank === 0) {
+      setMyYesterdayRank(Math.floor(Math.random() * Math.min(10, ranking.length)));
     }
   }, [ranking]);
 
@@ -63,27 +69,35 @@ export default function Home() {
         </button>
         <Link href="/timer" className="flex items-center gap-3 px-2.5 py-1.5 hover:bg-lightPurple rounded-md transition-colors duration-150">
           <div className="text-sm">타이머 보기</div>
-          <Image src="/images/arrow-right.png" alt="arrow-right" width={8} height={8} />
+          <Image 
+            src="/images/arrow-right.png" 
+            alt="arrow-right" 
+            width={8} 
+            height={8} 
+            style={{ width: "8px", height: "8px" }} 
+          />
         </Link>
       </header>
 
       <main className="flex flex-col gap-y-3 mt-20">
-        {myRank && (
-          <section className="flex items-center justify-between px-4 py-3 bg-white rounded-xl shadow-custom-2">
+        {myTodayRank && (
+          <section aria-labelledby="my-rank" className="flex items-center justify-between px-4 py-3 bg-white rounded-xl shadow-custom-2">
             <div className="flex items-center gap-x-2">
-              <span>나의 랭킹: <b>{myRank?.rank}등</b></span>
+              <span>나의 랭킹: <b>{myRankingItem?.rank}등</b></span>
               <div className="flex items-center h-7 px-1.5 text-sm bg-lightPurple text-purple rounded-md">
-                +2 상승
+                { myYesterdayRank === myTodayRank ? "+0 동일" : 
+                  myYesterdayRank > myTodayRank ? `+${myYesterdayRank - myTodayRank} 상승` : 
+                  `${myYesterdayRank - myTodayRank} 하락` }
               </div>
             </div>
-            <span className="text-sm font-bold">{formatMinutesToHours(myRank.time)}</span>
+            <span className="text-sm font-bold">{formatMinutesToHours(myRankingItem?.time || 0)}</span>
           </section>
         )}
 
-        <section>
+        <section aria-labelledby="ranking-list">
           <ul className="space-y-3">
             {ranking.map((item) => (
-              <RankingItem key={item.rank} item={item} isMyRank={myRank?.rank === item.rank} />
+              <RankingItem key={item.rank} item={item} isMyRank={myTodayRank === item.rank} />
             ))}
           </ul>
         </section>
